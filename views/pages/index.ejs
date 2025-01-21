@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Furniture Listings</title>
+  <link rel="stylesheet" href="/css/index.css">
+</head>
+<body>
+  <%- include('../partials/html-head') %>
+  <%- include('../partials/nav') %>
+
+  <div class="container">
+    <h1>Furniture Listings</h1>
+    <div class="grid">
+      <% furniture.forEach(item => { %>
+        <div class="grid-item">
+          <a href="/show/<%= item._id %>">
+            <img 
+              src="data:image/jpeg;base64,<%= item.image %>" 
+              alt="Furniture Image" 
+              style="max-width: 200px; max-height: 200px;"
+            />
+          </a>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</body>
+</html>

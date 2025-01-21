@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Furniture Details</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <%- include('../partials/html-head') %>
+  <%- include('../partials/nav') %>
+
+  <div class="container">
+    <h1><%= furniture.postName %></h1>
+    <img 
+      src="data:image/jpeg;base64,<%= furniture.image %>" 
+      alt="<%= furniture.postName %>" 
+      style="max-width: 500px; max-height: 500px;"
+    />
+    <p><strong>Description:</strong> <%= furniture.description %></p>
+
+    <a href="/pages/update/<%= furniture._id %>" class="btn">
+        Update Item
+      </a>
+
+      <% if (user) { %>
+        <form action="/pages/index/<%= furniture._id %>?_method=DELETE" method="POST">
+            <button type="submit">Delete <%= furniture.postName %></button>
+          </form>
+      <% } %>
+    
+      <a href="/index" class="btn">
+        Back to Listings
+      </a>
+  </div>
+</body>
+</html>
+

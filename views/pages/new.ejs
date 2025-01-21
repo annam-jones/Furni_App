@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Post</title>
+</head>
+<body>
+    <%- include('../partials/html-head') %>
+    <%- include('../partials/nav') %>
+  <div class="container">
+    <h1>Upload New Item</h1>
+    <form action="/post" method="POST" enctype="multipart/form-data">
+      <div>
+        <label for="postName">Post Name:</label>
+        <input type="text" id="postName" name="postName" required placeholder="Enter the furniture name">
+      </div>
+      <div>
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" required placeholder="Enter a description of the furniture" rows="4"></textarea>
+      </div>
+      <div>
+        <label for="image">Upload Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" required>
+      </div>
+      <button type="submit">Upload Furniture</button>
+    </form>
+  </div>
+</body>
+</html>

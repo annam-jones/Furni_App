@@ -1,40 +1,45 @@
 import express from 'express'
 
 import mongoose from 'mongoose'
+import Furniture from './models/furniture.js'
 import userController from './controllers/userController.js';
 import commentController from './controllers/commentController.js'
 import postController from './controllers/postController.js';
-import multer from 'multer';
+import session from 'express-session'
+import methodOverride from 'method-override'
 import path from 'path';
 
 const app = express()
 
+app.use(methodOverride('_method'));
+
+app.use(session({
+
+    secret: 'correcthorsebatterystaplefruitcake',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        secure: false,
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24, 
+    }
+}))
+
+app.use((req, res, next) => {
+    res.locals.user = req.session.user || null;
+    next ();
+});
+
 app.use(express.json())
 
+
+app.use(express.static(path.join(process.cwd(), 'public'))); 
+
+
+app.set('views/', path.join(process.cwd(), 'views'));
+
 app.use(express.urlencoded({ extended: false }));
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads');
-    },
-    filename: function (req, file, cb) {
-        const uniqueName = `${Date.now()}-${file.originalname}`;
-        cb(null, uniqueName);
-    }
-});
-
-const upload = multer({
-    storage: storage,
-    limits: {
-        fileSize: 2 * 1024 * 1024 
-    },
-    fileFilter: function (req, file, cb) {
-        if (!file.mimetype.startsWith('image/')) {
-            return cb(new Error('Only image files are allowed!'), false);
-        }
-        cb(null, true);
-    }
-});
+app.use(methodOverride('_method'))
 
 app.use('/', userController);
 
@@ -47,8 +52,7 @@ app.listen(3000, () => {
 })
 
 const url = 'mongodb://127.0.0.1:27017/'
-const dbname = 'artists-db'
+const dbname = 'furniture-db'
 mongoose.connect(`${url}${dbname}`)
 
 
-export default upload;

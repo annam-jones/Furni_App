@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Furniture</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+ 
+</head>
+<body>
+  <%- include('../partials/html-head') %>
+  <%- include('../partials/nav') %>
+  
+  <div id="form-container">
+    <h1>Update <%= furniture.postName %></h1>
+
+    <form action="/pages/update/<%= furniture._id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+      <div class="form-group">
+        <label for="name">Post Name:</label>
+        <input type="text" name="name" id="name" value="<%= furniture.postName %>">
+      </div>
+      <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="text" name="description" id="description" value="<%= furniture.description %>">
+      </div>
+      <div>
+        <label for="image">Upload Image:</label>
+        <input type="file" id="image" name="image" accept="image/*">
+      </div>
+    </form>
+
+    <form action="/show" method="GET">
+    <button type="submit">Update Item</button>
+    </form>
+
+    <form action="/" method="GET">
+      <button type="submit">Home</button>
+    </form>
+  </div>
+</body>
+</html>
+
+
