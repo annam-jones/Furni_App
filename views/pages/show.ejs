@@ -4,35 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Furniture Details</title>
-  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/show.css">
 </head>
 <body>
   <%- include('../partials/html-head') %>
   <%- include('../partials/nav') %>
 
-  <div class="container">
-    <h1><%= furniture.postName %></h1>
+  <div id="furniture-details-container" class="container">
+    <h1 id="furniture-title"><%= furniture.postName %></h1>
     <img 
+      id="furniture-image"
       src="data:image/jpeg;base64,<%= furniture.image %>" 
       alt="<%= furniture.postName %>" 
-      style="max-width: 500px; max-height: 500px;"
     />
-    <p><strong>Description:</strong> <%= furniture.description %></p>
+    <p id="furniture-description"><strong>Description:</strong> <%= furniture.description %></p>
 
-    <a href="/pages/update/<%= furniture._id %>" class="btn">
+    <div id="action-buttons">
+      <a href="/pages/update/<%= furniture._id %>" class="btn update-btn">
         Update Item
       </a>
 
       <% if (user) { %>
-        <form action="/pages/index/<%= furniture._id %>?_method=DELETE" method="POST">
-            <button type="submit">Delete <%= furniture.postName %></button>
-          </form>
+        <form id="delete-form" action="/pages/index/<%= furniture._id %>?_method=DELETE" method="POST">
+          <button type="submit" class="btn delete-btn">Delete <%= furniture.postName %></button>
+        </form>
       <% } %>
-    
-      <a href="/index" class="btn">
-        Back to Listings
-      </a>
+    </div>
+
+    <h2 id="comments-title">Comments</h2>
+    <form id="add-comment-form" action="/show/<%= furniture._id %>/comments" method="POST">
+      <textarea id="comment-textarea" name="content" placeholder="Add your comment" required></textarea>
+      <button type="submit" class="btn post-comment-btn">Post Comment</button>
+    </form>
+
+    <h3 id="existing-comments-title">Existing Comments</h3>
+    <ul id="comments-list">
+      <% furniture.comments.forEach(comment => { %>
+        <li class="comment-item">
+          <p class="comment-author"><strong>Comment by:</strong> <%= comment.user ? comment.user.username : "Anonymous" %></p>
+          <p class="comment-content"><%= comment.content %></p>
+          
+          <% if (user && comment.user && comment.user.toString() === user._id) { %>
+            <form class="delete-comment-form" action="/furniture/<%= furniture._id %>/comments/<%= comment._id %>?_method=DELETE" method="POST">
+              <button type="submit" class="btn delete-comment-btn">Delete</button>
+            </form>
+          <% } %>
+        </li>
+      <% }) %>
+    </ul>
+
+    <a href="/index" class="btn back-to-listings-btn">
+      Back to Listings
+    </a>
   </div>
 </body>
 </html>
+
 

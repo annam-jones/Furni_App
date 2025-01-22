@@ -47,17 +47,3 @@ nav {
     color: black; 
     border: 2px solid black; 
 }
-
-
-  #main-title {
-    text-align: center;
-    margin-top: 100px; 
-    flex: 1; 
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-   
-   
-}
-
-

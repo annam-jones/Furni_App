@@ -43,7 +43,7 @@ router.get('/post', (req, res) => {
 router.get('/show/:id', async (req, res) => {
     try {
         const furnitureId = req.params.id;
-        const furniture = await Furniture.findById(furnitureId);
+        const furniture = await Furniture.findById(furnitureId).populate('comments.user', 'username');
 
         if (!furniture) {
             return res.status(404).send({ message: "Furniture not found." });
@@ -63,6 +63,10 @@ router.get('/pages/update/:id', async (req, res) => {
 
         if (!furniture) {
             return res.status(404).send({ message: "Furniture not found." });
+        }
+
+        if (!furniture.user.equals(req.session.user._id)) {
+            return res.status(403).send({ message: "You are not authorized to update this listing." });
         }
 
         res.render('pages/update.ejs', { furniture });
@@ -137,12 +141,18 @@ router.post('/post', upload.single("image"), async (req, res) => {
             return res.status(400).send("Furniture name, description, and image are required.");
         }
 
+        
+        if (!req.session?.user?._id) {
+            return res.status(401).send({ message: "You must be logged in to create a post." });
+        }
+
         const base64Image = req.file.buffer.toString("base64");
 
         const newFurniture = new Furniture({
             postName,
             description,
             image: base64Image,
+            user: req.session.user._id, 
         });
 
         await newFurniture.save();
@@ -152,6 +162,7 @@ router.post('/post', upload.single("image"), async (req, res) => {
         handleError(error, res);
     }
 });
+
 
 router.delete('/pages/index/:id', async (req, res) => {
     try {

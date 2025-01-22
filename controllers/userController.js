@@ -61,21 +61,21 @@ router.get('/login', (req, res, next) => {
 
   router.post('/login', async (req, res, next) => {
     try {
-      // ? We need to know if the login was actually successful!
-  
-      const user = await User.findOne({ email: req.body.email })
-   
-      if (!user.isPasswordValid(req.body.password)) {
-        return res.status(401).send({ message: "Unauthorized"})
-      }
-  
-     
-      req.session.user = user 
-      res.redirect('/')
-  
-    } catch(error) {
-      handleError(error, res)
-    }
-  })
+        const user = await User.findOne({ email: req.body.email });
 
+   
+        if (!user || !(await user.isPasswordValid(req.body.password))) {
+            return res.status(401).send({ message: "Unauthorized" });
+        }
+
+        req.session.user = {
+            _id: user._id,
+            username: user.username,
+        };
+
+        res.redirect('/');
+    } catch (error) {
+        handleError(error, res);
+    }
+});
 export default router;
