@@ -2,15 +2,19 @@ import express from 'express'
 
 import mongoose from 'mongoose'
 import Furniture from './models/furniture.js'
-import userController from './controllers/userController.js';
-import commentController from './controllers/commentController.js'
-import postController from './controllers/postController.js';
+import userController from '../../controllers/userController.js';
+import commentController from '../../controllers/commentController.js'
+import postController from '../../controllers/postController.js';
 import session from 'express-session'
+import MongoStore from 'connect-mongo'
+import serverless from 'serverless-http'
 import methodOverride from 'method-override'
 import path from 'path';
 
 import dotenv from 'dotenv'
 dotenv.config()
+
+mongoose.connect(process.env.MONGODB_URI)
 
 const app = express()
 
@@ -25,7 +29,11 @@ app.use(session({
         secure: false,
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24, 
-    }
+    },
+    store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URI,
+        collectionName: 'sessions',
+    }),
 }))
 
 app.use((req, res, next) => {
@@ -36,7 +44,7 @@ app.use((req, res, next) => {
 app.use(express.json())
 
 
-app.use(express.static(path.join(process.cwd(), 'public'))); 
+app.use(express.static("public"));
 
 
 app.set('views', path.join(process.cwd(), 'views'));
@@ -50,14 +58,7 @@ app.use('/', postController);
 
 app.use("/", commentController);
 
-app.listen(3000, () => {
-    console.log('Server is running on port 3000!')
-})
-
 app.use(logger);
 
-const url = 'mongodb://127.0.0.1:27017/'
-const dbname = 'furniture-db'
-mongoose.connect(`${url}${dbname}`)
-
+export const handler = serverless(app)
 
