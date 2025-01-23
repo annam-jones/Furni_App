@@ -58,7 +58,5 @@ app.use('/', postController);
 
 app.use("/", commentController);
 
-app.use(logger);
-
 export const handler = serverless(app)
 

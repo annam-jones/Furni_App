@@ -2,10 +2,13 @@ import mongoose from "mongoose";
 import User from '../models/user.js';
 import Post from '../models/furniture.js';
 
+import dotenv from 'dotenv'
+dotenv.config()
+
 async function seed() {
     try {
         console.log('Connecting to database 🌱');
-        await mongoose.connect('mongodb://127.0.0.1:27017/furniture-app');
+        await mongoose.connect(process.env.MONGODB_URI);
 
         console.log('Clearing database...');
         await mongoose.connection.db.dropDatabase();
@@ -17,15 +20,6 @@ async function seed() {
             email: 'testuser@example.com',
             password: 'password123',
         });
-
-        furniture.forEach((furniture) => {
-            furniture.user = user;
-        })
-
-        console.log('Seeding new furniture posts... 🌱');
-
-
-        const sampleImageBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAUA...';
 
         const furniturePosts = [
             {
@@ -40,18 +34,22 @@ async function seed() {
                 image: 'base64-image-string',
                 user: user._id,
             },
-        ];
+        ]
+        furniturePosts.forEach((furniture) => {
+            furniture.user = user;
+        })
+
+        console.log('Seeding new furniture posts... 🌱');
+
+
+        const sampleImageBase64 = 'iVBORw0KGgoAAAANSUhEUgAAAAUA...';
+
+       
 
         const newFurniturePosts = await Post.create(furniturePosts);
         console.log('Created furniture posts:', newFurniturePosts);
 
-      
 
-        newFurniturePosts[0].comments.push(comment);
-
-        await newFurniturePosts[0].save();
-
-        console.log('Post with comment:', newFurniturePosts[0]);
 
         console.log('Seeding complete! 🌱');
     } catch (error) {
