@@ -2,17 +2,11 @@
     publish = "public"
     functions = "netlify/functions"
 
-
 [functions]
   external_node_modules = ["express", "ejs"]
   node_bundler = "esbuild"
   included_files = ["views/**", "public/**"] 
   
-  [[redirects]]
-  from = "/static/*"
-  to = "/static/:splat"
-  status = 200
-
 [[redirects]]
   force = true
   from = "/*"
