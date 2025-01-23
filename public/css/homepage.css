@@ -11,9 +11,11 @@ body {
   }
 
   #main-title h1 {
-    font-family: 'Big Caslon', serif; /* Ensure Big Caslon is loaded or included */
+    display: flex;
+    justify-content: center;
+    font-family: 'Big Caslon', serif; 
     color: white;
-    font-size: 4rem; /* Adjust size as needed */
+    font-size: 4rem; 
     text-align: center;
     margin: 20px 0;
     padding-top: 250px;
@@ -30,6 +32,7 @@ nav {
     padding: 10px 0;
     z-index: 1000; 
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    
 }
 
 

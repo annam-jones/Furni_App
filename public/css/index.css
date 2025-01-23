@@ -4,7 +4,16 @@
     align-items: center;
     min-height: calc(100vh - 60px); 
     padding-top: 80px; 
-    padding-left: 40px;
+    padding-left: 50px;
+    font-family: 'Big Caslon', serif;
+    color: black;
+}
+
+.header {
+    font-family: 'Big Caslon', serif;
+    color: black;
+    padding-right: 50px;
+    padding-bottom: 50px;
 }
 
 .grid {
@@ -26,6 +35,11 @@
 
 .grid-item img:hover {
     transform: scale(1.05);
+}
+
+.grid-item a {
+    color: black; /* Match the overall theme */
+    font-weight: bold;
 }
 
 nav {
