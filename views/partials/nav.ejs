@@ -3,16 +3,13 @@
   <a href="/index" class="nav-bar-link">Listings</a>
   
   <% if (user) { %>
-    <!-- Show "Post" option only if the user is logged in -->
     <a href="/post" class="nav-bar-link">Post</a>
   <% } %>
   
   <% if (!user) { %>
-    <!-- Show login and signup options for logged-out users -->
     <a href="/login" class="nav-bar-link">Login</a>
     <a href="/signup" class="nav-bar-link">Sign Up</a>
   <% } else { %>
-    <!-- Show logout option for logged-in users -->
     <a href="/user/logout" class="nav-bar-link">Logout</a>
   <% } %>
 </nav>

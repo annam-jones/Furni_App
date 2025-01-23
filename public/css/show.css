@@ -58,6 +58,7 @@ body {
     background-color: #ffffff;
     margin: 0;
     padding: 0;
+    margin-top: 60px;
 }
 
 #furniture-title {
@@ -188,7 +189,7 @@ body {
 
 .back-to-listings-btn {
     display: inline-block;
-    margin-top: 20px;
+    margin-top: 10px;
     color: black;
     text-decoration: none;
     padding: 10px 20px;
@@ -196,6 +197,7 @@ body {
     border-radius: 5px;
     transition: all 0.3s ease-in-out;
     border: 2px solid black; 
+    margin-bottom: 20px;
 
 }
 
