@@ -1,7 +1,6 @@
 import express from 'express'
 
 import mongoose from 'mongoose'
-import Furniture from './models/furniture.js'
 import userController from '../../controllers/userController.js';
 import commentController from '../../controllers/commentController.js';
 import postController from '../../controllers/postController.js';
