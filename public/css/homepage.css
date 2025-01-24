@@ -6,7 +6,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background: url('/houseinwoods2.jpg') no-repeat center center fixed;
+    background: url('https://res.cloudinary.com/dq9lsxbkh/image/upload/v1737715566/houseinwoods2_xworl0.jpg') no-repeat center center fixed;
     background-size: cover;
   }
 
@@ -18,7 +18,7 @@ body {
     font-size: 4rem; 
     text-align: center;
     margin: 20px 0;
-    padding-top: 250px;
+    padding-top: 350px;
 }
 
 nav {
