@@ -7,6 +7,15 @@ const router = express.Router();
 
 router.use(methodOverride('_method'));
 
+// Authentication middleware
+function isAuthenticated(req, res, next) {
+    if (!req.session || !req.session.user || !req.session.user._id) {
+        return res.status(401).send({ message: "You must be logged in to perform this action." });
+        // Alternatively: return res.redirect('/login');
+    }
+    next();
+}
+
 function handleError(error, res) {
     console.log(error);
     if (error.name === 'CastError') {
@@ -16,12 +25,10 @@ function handleError(error, res) {
     }
 }
 
-
 const upload = multer({
     storage: multer.memoryStorage(),
     limits: { fileSize: 1 * 1024 * 1024 }, 
 });
-
 
 router.get('/', (req, res) => {
     res.render("pages/homepage.ejs");
@@ -39,7 +46,6 @@ router.get('/post', (req, res) => {
     }
 });
 
-
 router.get('/show/:id', async (req, res) => {
     try {
         const furnitureId = req.params.id;
@@ -55,8 +61,7 @@ router.get('/show/:id', async (req, res) => {
     }
 });
 
-
-router.get('/pages/update/:id', async (req, res) => {
+router.get('/pages/update/:id', isAuthenticated, async (req, res) => {
     try {
         const furnitureID = req.params.id;
         const furniture = await Furniture.findById(furnitureID);
@@ -65,6 +70,7 @@ router.get('/pages/update/:id', async (req, res) => {
             return res.status(404).send({ message: "Furniture not found." });
         }
 
+        // Safe to use req.session.user._id now
         if (!furniture.user.equals(req.session.user._id)) {
             return res.status(403).send({ message: "You are not authorized to update this listing." });
         }
@@ -75,15 +81,12 @@ router.get('/pages/update/:id', async (req, res) => {
     }
 });
 
-
-
-router.put('/pages/update/:id', upload.single("image"), async (req, res) => {
+router.put('/pages/update/:id', isAuthenticated, upload.single("image"), async (req, res) => {
     try {
         const { name, description } = req.body;
         const furnitureID = req.params.id;
 
         const updateData = { postName: name, description };
-
     
         if (req.file) {
             const base64Image = req.file.buffer.toString("base64");
@@ -133,7 +136,7 @@ router.get('/index', async (req, res) => {
     }
 });
 
-router.post('/post', upload.single("image"), async (req, res) => {
+router.post('/post', isAuthenticated, upload.single("image"), async (req, res) => {
     try {
         const { postName, description } = req.body;
 
@@ -141,18 +144,14 @@ router.post('/post', upload.single("image"), async (req, res) => {
             return res.status(400).send("Furniture name, description, and image are required.");
         }
 
-        
-        if (!req.session?.user?._id) {
-            return res.status(401).send({ message: "You must be logged in to create a post." });
-        }
-
+        // No need to check session again since middleware handles it
         const base64Image = req.file.buffer.toString("base64");
 
         const newFurniture = new Furniture({
             postName,
             description,
             image: base64Image,
-            user: req.session.user._id, 
+            user: req.session.user._id, // Safe to use now
         });
 
         await newFurniture.save();
@@ -163,11 +162,9 @@ router.post('/post', upload.single("image"), async (req, res) => {
     }
 });
 
-
-router.delete('/pages/index/:id', async (req, res) => {
+router.delete('/pages/index/:id', isAuthenticated, async (req, res) => {
     try {
         const id = req.params.id;
-
         
         const furniture = await Furniture.findById(id).populate('user');
 
@@ -179,18 +176,17 @@ router.delete('/pages/index/:id', async (req, res) => {
             return res.status(404).send({ message: "Item doesn't exist" });
         }
 
-      if (!furniture.user._id.equals(req.session.user._id)) {
+       
+        if (!furniture.user._id.equals(req.session.user._id)) {
             return res.status(403).send({ message: "This is not your item to delete!" });
         }
 
-      await Furniture.findByIdAndDelete(id);
+        await Furniture.findByIdAndDelete(id);
 
-      res.redirect('/index');
+        res.redirect('/index');
     } catch (error) {
         handleError(error, res);
     }
 });
 
-
 export default router;
-
