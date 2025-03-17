@@ -7,11 +7,11 @@ const router = express.Router();
 
 router.use(methodOverride('_method'));
 
-// Authentication middleware
+
 function isAuthenticated(req, res, next) {
     if (!req.session || !req.session.user || !req.session.user._id) {
         return res.status(401).send({ message: "You must be logged in to perform this action." });
-        // Alternatively: return res.redirect('/login');
+        
     }
     next();
 }
@@ -70,7 +70,6 @@ router.get('/pages/update/:id', isAuthenticated, async (req, res) => {
             return res.status(404).send({ message: "Furniture not found." });
         }
 
-        // Safe to use req.session.user._id now
         if (!furniture.user.equals(req.session.user._id)) {
             return res.status(403).send({ message: "You are not authorized to update this listing." });
         }
@@ -144,7 +143,7 @@ router.post('/post', isAuthenticated, upload.single("image"), async (req, res) =
             return res.status(400).send("Furniture name, description, and image are required.");
         }
 
-        // No need to check session again since middleware handles it
+  
         const base64Image = req.file.buffer.toString("base64");
 
         const newFurniture = new Furniture({
