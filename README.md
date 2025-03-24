@@ -56,6 +56,17 @@ This code defines a database seeding function for a furniture marketplace applic
 
 <img width="1405" alt="Furni_Item" src="https://github.com/user-attachments/assets/3bc5a127-a164-489a-a146-881905e0103a" />
 
+## Challenges 
+
+- Route Organization, organizing API endpoints logically while keeping middleware, controllers, and routes maintainable as the application grows in complexity.
+- Error Handling - Implementing consistent error handling patterns across different Express routes to provide meaningful feedback for both client applications and developers.
+
+## Future Improvements 
+
+- Advanced Search Functionality, add filters for furniture type, price range, condition, and location with autocomplete suggestions.
+- Integrated Payment System, add secure payment processing for direct purchases through the platform.
+
+
 
 
 
